@@ -4,9 +4,9 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using WebApplication1.Models;
+using Sales.Models;
 
-namespace WebApplication1.Controllers
+namespace Sales.Controllers
 {
     public class HomeController : Controller
     {
@@ -18,6 +18,7 @@ namespace WebApplication1.Controllers
         public IActionResult About()
         {
             ViewData["Message"] = "Your application description page.";
+            ViewData["Info"] = "Esta página está em construção.";
 
             return View();
         }
@@ -38,6 +39,14 @@ namespace WebApplication1.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        public IActionResult Departments()
+        {
+            ViewData["Message"] = "Your application description page.";
+            ViewData["Info"] = "Esta página está em construção.";
+
+            return View();
         }
     }
 }

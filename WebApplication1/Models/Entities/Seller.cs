@@ -13,6 +13,12 @@ namespace Sales.Models.Entities
         public DateTime BirthDate { get; set; }
         public double BaseSalary { get; set; }
         public Department Department { get; set; }
+        public ICollection<SalesRecord> Sales { get; set; }
+
+        public Seller()
+        {
+            Sales = new List<SalesRecord>();
+        }
 
         public Seller(int id, string name, string email, DateTime birthDate, double baseSalary, Department department)
         {
@@ -22,6 +28,22 @@ namespace Sales.Models.Entities
             BirthDate = birthDate;
             BaseSalary = baseSalary;
             Department = department;
+            Sales = new List<SalesRecord>();
+        }
+
+        public void AddSales(SalesRecord sr)
+        {
+            Sales.Add(sr);
+        }
+
+        public void RemoveSales(SalesRecord sr)
+        {
+            Sales.Remove(sr);
+        }
+
+        public double TotalSales(DateTime startDate, DateTime endDate)
+        {
+            return Sales.Where(s => s.Date >= startDate && s.Date < endDate).Sum(s => s.Amount);
         }
     }
 }

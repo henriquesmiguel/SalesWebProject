@@ -10,22 +10,22 @@ using Sales.Models.Entities;
 
 namespace Sales.Controllers
 {
-    public class DepartmentsController : Controller
+    public class SellersController : Controller
     {
         private readonly SalesContext _context;
 
-        public DepartmentsController(SalesContext context)
+        public SellersController(SalesContext context)
         {
             _context = context;
         }
 
-        // GET: Departments
+        // GET: Sellers
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Department.ToListAsync());
+            return View(await _context.Seller.ToListAsync());
         }
 
-        // GET: Departments/Details/5
+        // GET: Sellers/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -33,39 +33,39 @@ namespace Sales.Controllers
                 return NotFound();
             }
 
-            var department = await _context.Department
+            var seller = await _context.Seller
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (department == null)
+            if (seller == null)
             {
                 return NotFound();
             }
 
-            return View(department);
+            return View(seller);
         }
 
-        // GET: Departments/Create
+        // GET: Sellers/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Departments/Create
+        // POST: Sellers/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name")] Department department)
+        public async Task<IActionResult> Create([Bind("Id,Name,Email,BirthDate,BaseSalary")] Seller seller)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(department);
+                _context.Add(seller);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(department);
+            return View(seller);
         }
 
-        // GET: Departments/Edit/5
+        // GET: Sellers/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -73,22 +73,22 @@ namespace Sales.Controllers
                 return NotFound();
             }
 
-            var department = await _context.Department.FindAsync(id);
-            if (department == null)
+            var seller = await _context.Seller.FindAsync(id);
+            if (seller == null)
             {
                 return NotFound();
             }
-            return View(department);
+            return View(seller);
         }
 
-        // POST: Departments/Edit/5
+        // POST: Sellers/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name")] Department department)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Email,BirthDate,BaseSalary")] Seller seller)
         {
-            if (id != department.Id)
+            if (id != seller.Id)
             {
                 return NotFound();
             }
@@ -97,12 +97,12 @@ namespace Sales.Controllers
             {
                 try
                 {
-                    _context.Update(department);
+                    _context.Update(seller);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!DepartmentExists(department.Id))
+                    if (!SellerExists(seller.Id))
                     {
                         return NotFound();
                     }
@@ -113,10 +113,10 @@ namespace Sales.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(department);
+            return View(seller);
         }
 
-        // GET: Departments/Delete/5
+        // GET: Sellers/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -124,30 +124,30 @@ namespace Sales.Controllers
                 return NotFound();
             }
 
-            var department = await _context.Department
+            var seller = await _context.Seller
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (department == null)
+            if (seller == null)
             {
                 return NotFound();
             }
 
-            return View(department);
+            return View(seller);
         }
 
-        // POST: Departments/Delete/5
+        // POST: Sellers/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var department = await _context.Department.FindAsync(id);
-            _context.Department.Remove(department);
+            var seller = await _context.Seller.FindAsync(id);
+            _context.Seller.Remove(seller);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool DepartmentExists(int id)
+        private bool SellerExists(int id)
         {
-            return _context.Department.Any(e => e.Id == id);
+            return _context.Seller.Any(e => e.Id == id);
         }
     }
 }

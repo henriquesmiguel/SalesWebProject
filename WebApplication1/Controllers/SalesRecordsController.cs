@@ -7,22 +7,52 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Sales.Models;
 using Sales.Models.Entities;
+using Sales.Services;
+
 
 namespace Sales.Controllers
 {
     public class SalesRecordsController : Controller
     {
         private readonly SalesContext _context;
+        private readonly SalesRecordService _salesRecordService;
+        private readonly SellerService _sellerService;
 
-        public SalesRecordsController(SalesContext context)
+        public SalesRecordsController(SalesContext context, SalesRecordService salesRecordService, SellerService sellerService)
         {
             _context = context;
+            _salesRecordService = salesRecordService;
+            _sellerService = sellerService;
         }
 
         // GET: SalesRecords
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? sellerId)
         {
-            return View(await _context.SalesRecord.ToListAsync());
+            Seller s = new Seller();
+            if (sellerId != null)
+            {
+               s = await _sellerService.FindByIdAsync(sellerId.Value);
+            }
+            return View(s);
+        }
+
+        public async Task<IActionResult> SimpleSearch(DateTime minDate, DateTime maxDate, int? sellerId)
+        {
+            ViewData["minDate"] = minDate; //.ToString("yyyy-mm-dd");
+            ViewData["maxDate"] = maxDate; //.ToString("yyyy-mm-dd");
+
+            var list = await _salesRecordService.FindAllSimpleAsync(minDate, maxDate, sellerId);
+
+            return View(list);
+        }
+
+        public async Task<IActionResult> GroupingSearch(DateTime minDate, DateTime maxDate, int? sellerId)
+        {
+            ViewData["minDate"] = minDate; //.ToString("yyyy-mm-dd");
+            ViewData["maxDate"] = maxDate; //.ToString("yyyy-mm-dd");
+
+            var list = await _salesRecordService.FindAllGroupedAsync(minDate, maxDate, sellerId);
+            return View(list);
         }
 
         // GET: SalesRecords/Details/5
